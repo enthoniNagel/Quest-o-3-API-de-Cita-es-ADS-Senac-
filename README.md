@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# Questão 3: API de Citações
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Descrição do Projeto
 
-## Available Scripts
+Neste projeto, criamos um **componente React** que busca citações aleatórias de uma API chamada **Quotable**. O objetivo principal é exibir uma citação inspiradora junto com o nome do autor.
 
-In the project directory, you can run:
+## Objetivos
 
-### `npm start`
+- **Implementar requisições HTTP** para obter citações aleatórias.
+- **Exibir a citação** e o autor de forma clara e agradável.
+- Proporcionar uma experiência de usuário fluida, permitindo gerar novas citações com um clique.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Detalhes Técnicos
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+O componente utiliza o hook `useEffect` para buscar as citações assim que o componente é montado. Abaixo está a estrutura básica do código:
 
-### `npm test`
+```javascript
+import React, { useState, useEffect } from 'react';
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const App = () => {
+  const [quote, setQuote] = useState('');
+  const [author, setAuthor] = useState('');
 
-### `npm run build`
+  const fetchQuote = async () => {
+    try {
+      const response = await fetch('https://api.quotable.io/random');
+      const data = await response.json();
+      setQuote(data.content);
+      setAuthor(data.author);
+    } catch (error) {
+      console.error('Erro ao buscar citação:', error);
+    }
+  };
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  useEffect(() => {
+    fetchQuote();
+  }, []);
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  return (
+    <div style={{ textAlign: 'center', padding: '50px' }}>
+      <h1>Citação Aleatória</h1>
+      <p>"{quote}"</p>
+      <h3>- {author}</h3>
+      <button onClick={fetchQuote}>Gerar Nova Citação</button>
+    </div>
+  );
+};
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default App;
